@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\FWLIB\inc;..\HARDWARE\ADC;..\HARDWARE\BEEP;..\HARDWARE\BJDJ;..\HARDWARE\EXTI;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\TIMER</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\HARDWARE\LED;..\FWLIB\inc;..\HARDWARE\ADC;..\HARDWARE\BEEP;..\HARDWARE\BJDJ;..\HARDWARE\EXTI;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\TIMER;..\HARDWARE\USART3;..\HARDWARE\GPS;..\HARDWARE\USART4</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -436,6 +436,21 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\TIMER\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\USART3\usart3.c</FilePath>
+            </File>
+            <File>
+              <FileName>gps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\GPS\gps.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\USART4\usart4.c</FilePath>
             </File>
           </Files>
         </Group>

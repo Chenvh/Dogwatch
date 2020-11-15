@@ -1,31 +1,16 @@
 #include "timer.h"
 #include "BJDJ.h"
 #include "led.h"
-//////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F407开发板
-//定时器 驱动代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2014/5/4
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved									  
-////////////////////////////////////////////////////////////////////////////////// 	 
 
-
-//通用定时器3中断初始化
-//arr：自动重装值。
-//psc：时钟预分频数
-//定时器溢出时间计算方法:Tout=((arr+1)*(psc+1))/Ft us.
-//Ft=定时器工作频率,单位:Mhz
-//这里使用的是定时器3!
 extern u8 return_motor_start_flag;
 extern u8 return_motor_CW_flag;
 extern u8 return_motor_ANTICW_flag;
 extern u8 uper_motor_CW_flag;
 extern u8 uper_motor_ANTICW_flag;
+
+
+extern vu16 USART3_RX_STA;
+extern vu16 USART4_RX_STA;
 
 void TIM3_Int_Init(u16 arr,u16 psc)
 {
@@ -51,6 +36,80 @@ void TIM3_Int_Init(u16 arr,u16 psc)
 	NVIC_Init(&NVIC_InitStructure);
 	
 }
+
+ 
+void TIM7_Int_Init(u16 arr,u16 psc)
+{	
+	NVIC_InitTypeDef NVIC_InitStructure;
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);//TIM7????    
+	
+	//???TIM7???
+	TIM_TimeBaseStructure.TIM_Period = arr; //???????????????????????????	
+	TIM_TimeBaseStructure.TIM_Prescaler =psc; //??????TIMx???????????
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //??????:TDTS = Tck_tim
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM??????
+	TIM_TimeBaseInit(TIM7, &TIM_TimeBaseStructure); //??????????TIMx???????
+ 
+	TIM_ITConfig(TIM7,TIM_IT_Update,ENABLE ); //?????TIM7??,??????
+	
+	TIM_Cmd(TIM7,ENABLE);//?????7
+	
+	NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0 ;//?????0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;		//????2
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ????
+	NVIC_Init(&NVIC_InitStructure);	//??????????VIC???
+	
+}
+void TIM5_Int_Init(u16 arr,u16 psc)
+{	
+	NVIC_InitTypeDef NVIC_InitStructure;
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);//TIM7????    
+	
+	//???TIM7???
+	TIM_TimeBaseStructure.TIM_Period = arr; //???????????????????????????	
+	TIM_TimeBaseStructure.TIM_Prescaler =psc; //??????TIMx???????????
+	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1; //??????:TDTS = Tck_tim
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  //TIM??????
+	TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure); //??????????TIMx???????
+ 
+	TIM_ITConfig(TIM5,TIM_IT_Update,ENABLE ); //?????TIM7??,??????
+	
+	TIM_Cmd(TIM5,ENABLE);//?????7
+	
+	NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0 ;//?????0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;		//????2
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ????
+	NVIC_Init(&NVIC_InitStructure);	//??????????VIC???
+	
+}
+
+void TIM5_IRQHandler(void)
+{ 	
+	if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET)//?????
+	{	 			   
+		USART4_RX_STA|=1<<15;	//??????
+		TIM_ClearITPendingBit(TIM5, TIM_IT_Update  );  //??TIM7??????    
+		TIM_Cmd(TIM5, DISABLE);  //??TIM7 
+	}	    
+}
+
+
+void TIM7_IRQHandler(void)
+{ 	
+	if (TIM_GetITStatus(TIM7, TIM_IT_Update) != RESET)//?????
+	{	 			   
+		USART3_RX_STA|=1<<15;	//??????
+		TIM_ClearITPendingBit(TIM7, TIM_IT_Update  );  //??TIM7??????    
+		TIM_Cmd(TIM7, DISABLE);  //??TIM7 
+	}	    
+}
+
 
 //定时器3中断服务函数
 void TIM3_IRQHandler(void)

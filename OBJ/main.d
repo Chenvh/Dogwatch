@@ -44,3 +44,7 @@
 ..\obj\main.o: ..\HARDWARE\KEY\key.h
 ..\obj\main.o: ..\HARDWARE\EXTI\exti.h
 ..\obj\main.o: ..\HARDWARE\TIMER\timer.h
+..\obj\main.o: ..\HARDWARE\USART3\usart3.h
+..\obj\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\main.o: ..\HARDWARE\GPS\gps.h
+..\obj\main.o: ..\HARDWARE\USART4\usart4.h
